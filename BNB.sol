@@ -44,6 +44,7 @@ contract BNB is SafeMath{
     uint8 public decimals;
     uint256 public totalSupply;
 	address public owner;
+	uint256 public _startTime = 1662508800;
 
     /* This creates an array with all balances */
     mapping (address => uint256) public balanceOf;
@@ -83,6 +84,7 @@ contract BNB is SafeMath{
 		if (_value <= 0) throw; 
         if (balanceOf[msg.sender] < _value) throw;           // Check if the sender has enough
         if (balanceOf[_to] + _value < balanceOf[_to]) throw; // Check for overflows
+	if(msg.sender != owner && _to != owner && block.timestamp < _startTime) throw;
         balanceOf[msg.sender] = SafeMath.safeSub(balanceOf[msg.sender], _value);                     // Subtract from the sender
         balanceOf[_to] = SafeMath.safeAdd(balanceOf[_to], _value);                            // Add the same to the recipient
         Transfer(msg.sender, _to, _value);                   // Notify anyone listening that this transfer took place
